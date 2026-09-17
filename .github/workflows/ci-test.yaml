@@ -12,9 +12,28 @@ jobs:
   run-test-code:
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v4
-     - uses: actions/setup-python@v5
-       with:
-        python-version: "3.13"
-     - run: pip install -r requirements.txt
-     - run: pytest
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt
+      - run: pytest
+  build:
+    needs: [run-test-code]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r requirements.txt
+      
+      - name: Image Build
+        run: docker build -t goguma1/flaskweb:latest .
+      - name: Image Display
+        run: docker images
+      - name: Image Push
+        uses: docker/login-actions@v1
+        with:
+          username: goguma1
+          password: ${{ secrets.DOCKERHUB_TOKEN}}

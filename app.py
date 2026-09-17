@@ -11,7 +11,7 @@ db = client.dbsparta
 def home():
     return render_template('index.html')
 
-@app.route('/memo', method=['GET'])
+@app.route('/memo', methods=['GET'])
 def listing():
     articles = list(db.articles.fin({}, {'_id':False}))
     return jsonify({'all_articles':articles})
