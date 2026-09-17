@@ -56,3 +56,19 @@ jobs:
           envs: DOCKER_USERNAME, DOKCER_REPO, DOCKER_TOKEN
           debug: true
           time: 30s
+          command_timeout: 5m
+          request_pty: true
+          use_insecure_cipher: true   # 사실상 여기까지가 설정
+          
+          script: |  # 여기서부터 명령
+            # 1. 도커 로그인
+            echo "Successfully Connected"
+            echo "Starting deployment for : $DOCKER_USERNAME/$DOKCER_REPO"
+            echo "${DOCKER_TOKEN}" | sudo docker login -u "${DOCKER_USERNAME}" --password-stdin
+            
+            # 2. 이미지 가져오기
+            sudo docker pull $DOCKER_USERNAME/$DOKCER_REPO:latest
+            sudo docker stop my-app-container 2>/dev/null || true
+            sudo docker rm my-app-container 2>/dev/null || true
+            sudo docker run -d --name my-app-container -p 5000:5000 --restart always $DOCKER_USERNAME/$DOKCER_REPO:latest
+            sudo docker image prune -f
