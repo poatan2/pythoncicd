@@ -1,0 +1,25 @@
+name: learn-github-actions
+
+on: 
+  push:
+    branches:
+      - main:
+  pull_requests:
+    branches:
+      - main
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4   # git clone과 같은 동작
+      
+      - name: Setup Python    # 파이썬 설치 - Plugin 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13" 
+
+      - name: Display Python version
+        run: python --version   # 쉘 명령어는 run을 사용하여 입력한다.
