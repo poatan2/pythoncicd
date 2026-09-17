@@ -33,7 +33,7 @@ jobs:
       - name: Image Display
         run: docker images
       - name: Image Push
-        uses: docker/login-actions@v1
+        uses: docker/login-action@v1
         with:
           username: goguma1
           password: ${{ secrets.DOCKERHUB_TOKEN}}
